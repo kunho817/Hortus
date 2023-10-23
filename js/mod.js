@@ -2,24 +2,25 @@ let modInfo = {
 	name: "Hortus",
 	id: "hortus",
 	author: "Aizure",
-	pointsName: "points",
+	pointsName: "void energy",
 	modFiles: ["layers.js", "tree.js"],
 
 	discordName: "Aizure",
 	discordLink: "",
-	initialStartPoints: new Decimal (10), // Used for hard resets and new players
+	initialStartPoints: new Decimal (1), // Used for hard resets and new players
 	offlineLimit: 24,  // In hours
 }
 
 // Set your version in num and name
 let VERSION = {
 	num: "0.1",
-	name: "Blooming Tenebris",
+	name: "Beginning of all Stories",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<h3>v0.1</h3><br>
-		- Added First Layer, "Tenebris"`
+		- This is the start of Hortus.<br>
+		- Added First Layer, "Void"`
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
 
@@ -33,7 +34,9 @@ function getStartPoints(){
 
 // Determines if it should show points/sec
 function canGenPoints(){
-	return true
+	let can = false
+	if(hasUpgrade('v', 11)) can = upgradeEffect('v', 11)
+	return can
 }
 
 // Calculate points/sec!
