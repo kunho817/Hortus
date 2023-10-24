@@ -5,7 +5,8 @@ addLayer("v", {
     startData() {
         return {
             unlocked: true,
-            points: new Decimal(0),
+            pvoid: new Decimal(0),
+            vwon: false,
         }
     },
     color: "#390075",
@@ -31,18 +32,33 @@ addLayer("v", {
     ],
     layerShown(){return true},
 
-    upgrades: {
-        rows : 1,
-        cols : 1,
-        11: {
-            title: "In to the Void",
-            description: "Gain 0.1 void energy/s.",
-            cost: new Decimal(1),
-            effect(){
-                return true
-            },
-            effectDisplay(){
-                return format(getPointGen()) + "/s"
+    
+
+    tabFormat:{
+        "Main Tab":{
+            upgrades: {
+                rows : 1,
+                cols : 1,
+                11: {
+                    title: "In to the Void",
+                    description: "Gain 0.1 void energy/s.",
+                    cost: new Decimal(1),
+                    effect(){
+                        return true
+                    },
+                    effectDisplay(){
+                        return format(getPointGen()) + "/s"
+                    }
+                }
+            }
+        },
+        "Milestone Tab":{
+            milestones:{
+                0:{
+                    title:"required : 10 purified void",
+                    description:"unlock Void Well",
+                    done(){return player.v.pvoid.gte(10)}
+                }
             }
         }
     }
