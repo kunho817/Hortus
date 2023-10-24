@@ -54,16 +54,4 @@ addLayer("v", {
             done(){return player.v.points.gte(10)}
         }
     },
-    
-
-    tabFormat:{
-        "Main":{
-            cotnent:["main-display", "upgrades"],
-            
-        },
-        "Milestone":{
-            content:"milestones",
-            
-        }
-    }
 })
