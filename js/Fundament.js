@@ -5,7 +5,7 @@ addLayer("v", {
     startData() {
         return {
             unlocked: true,
-            pvoid: new Decimal(0),
+            points: new Decimal(0),
             vwon: false,
         }
     },
@@ -51,7 +51,7 @@ addLayer("v", {
         0:{
             title:"required : 10 purified void",
             description:"unlock Void Well",
-            done(){return player.v.pvoid.gte(10)}
+            done(){return player.v.points.gte(10)}
         }
     },
     
