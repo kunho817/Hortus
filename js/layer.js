@@ -51,7 +51,28 @@ addLayer("v", {
         0:{
             requirementDescription:"required : 10 purified void",
             effectDescription:"unlock Void Well",
-            done(){return player.v.points.gte(10)}
+            done(){
+                return player.v.points.gte(10)
+            }
         },
     },
+
+    tabFormat:{
+        "Main":{
+            content:[
+                "main-display",
+                ["display-text",
+                    function() { return 'I have ' + format(player.points) + ' pointy points!' },
+                    { "color": "red", "font-size": "32px", "font-family": "Comic Sans MS" }
+                ],
+            ],
+
+        },
+        "Milsestones":{
+            content:[
+                "main-display",
+                "milestones",
+            ]
+        }
+    }
 })
