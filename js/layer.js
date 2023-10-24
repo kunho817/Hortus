@@ -49,9 +49,9 @@ addLayer("v", {
     },
     milestones:{
         0:{
-            title:"required : 10 purified void",
-            description:"unlock Void Well",
+            requirementDescription:"required : 10 purified void",
+            effectDescription:"unlock Void Well",
             done(){return player.v.points.gte(10)}
-        }
+        },
     },
 })
