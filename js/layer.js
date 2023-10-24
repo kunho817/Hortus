@@ -61,7 +61,7 @@ addLayer("v", {
         "Main":{
             content:[
                 "main-display",
-
+                "upgrades",
             ],
 
         },
