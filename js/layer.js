@@ -61,14 +61,14 @@ addLayer("v", {
         "Main":{
             content:[
                 "main-display",
-                ["display-text",
-                    function() { return 'I have ' + format(player.points) + ' pointy points!' },
-                    { "color": "red", "font-size": "32px", "font-family": "Comic Sans MS" }
-                ],
+
             ],
 
         },
         "Milsestones":{
+            unlocked(){
+                return hasMilestone("v", "0")
+            },
             content:[
                 "main-display",
                 "milestones",
