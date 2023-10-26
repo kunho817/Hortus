@@ -81,3 +81,15 @@
 .hl {
 	border-top: 3px solid var(--color);
 }
+
+.st{
+    color: #6a97e4;
+    font-size: 10px;
+    text-shadow: 0 0 1px #276BE0, 0 0 3px #5a08b8, 0 0 5px #123d86, 0 0 6px #5083da, 0 0 7px #8cb6ff;
+}
+
+.wander{
+    color: #d6d6d6;
+    font-size:10px;
+    text-shadow: 0 0 1px #4b4b4b, 0 0 3px #7c7c7c, 0 0 5px #8a8a8a, 0 0 6px #c7c7c7, 0 0 7px #ffffff;
+}

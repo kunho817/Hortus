@@ -2,12 +2,12 @@ let modInfo = {
 	name: "Hortus",
 	id: "hortus",
 	author: "Aizure",
-	pointsName: "void energy",
+	pointsName: "Stellaria",
 	modFiles: ["layer.js", "tree.js"],
 
 	discordName: "Aizure",
 	discordLink: "",
-	initialStartPoints: new Decimal (1), // Used for hard resets and new players
+	initialStartPoints: new Decimal (0), // Used for hard resets and new players
 	offlineLimit: 24,  // In hours
 }
 
@@ -35,7 +35,7 @@ function getStartPoints(){
 // Determines if it should show points/sec
 function canGenPoints(){
 	let can = false
-	if(hasUpgrade('v', 11)) can = upgradeEffect('v', 11)
+	if(hasUpgrade('w', 11)) can = true
 	return can
 }
 
@@ -44,7 +44,7 @@ function getPointGen() {
 	if(!canGenPoints())
 		return new Decimal(0)
 
-	let gain = new Decimal(0.1)
+	let gain = new Decimal(0.0001)
 	return gain
 }
 
