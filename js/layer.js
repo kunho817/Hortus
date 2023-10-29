@@ -6,6 +6,23 @@ function wanderingText(txt){
     return "<h1 class=wander>"+txt+"</h1>"
 }
 
+// Wandering Layer 함수 모음
+function hasJourneyUpgrade(id){
+    return getClickableState("w", id) == "On"
+}
+
+function setJourneyUpgrade(id){
+    setClickableState("w", id, "On")
+}
+
+function canBuyJourney(amount, id){
+    return (player.w.points.gte(amount) && !hasJourneyUpgrade(id))
+}
+
+function canBuyFootprints(amount, id){
+    return (player.w.distance.gte(amount) && !hasJourneyUpgrade(id))
+}
+
 addLayer("w", {
     name:"Wandering",
     symbol:"W",
@@ -15,34 +32,285 @@ addLayer("w", {
             unlocked: true,
             points: decimalOne,
             total: decimalOne,
-            consume:new Decimal(0.01),
+            consume:new Decimal(5),
+
+            distance:decimalZero,
+            dispersec:decimalZero,
+
+            footprints:decimalZero,
+            journeys:decimalZero,
+            
         }
     },
     color:"white",
     resource:"Journey",
     type:"none",
 
+    update(delta){
+        player.w.distance = player.w.distance.add(player.w.dispersec.mul(delta))
+
+        let tdisps = new Decimal(0)
+
+        if(hasJourneyUpgrade(101))
+        {
+            tdisps = new Decimal(0.1)
+            if(hasJourneyUpgrade(102)) tdisps = tdisps.mul(2)
+            if(hasJourneyUpgrade(103)) tdisps = tdisps.mul(clickableEffect(this.layer, 103))
+            if(hasJourneyUpgrade(105)) tdisps = tdisps.mul(2)
+            if(hasJourneyUpgrade(106)) tdisps = tdisps.mul(player.points.log10().mul(3))
+        }
+
+        player.w.dispersec = tdisps
+    },
+
     clickables: {
         11: {
-            title:"The stars sing your journey.",
-            display() {return "<br>consume "+stellariaText(format(player.w.consume)+" Stellaria")+" to get "+wanderingText("1 Journey")},
+            display() {
+                if(this.canClick())
+                    return "<font size=2.5px><b>The stars sing your journey.</b></font><br><br>consume "+stellariaText(format(player.w.consume)+" Starlight")+" to get "+wanderingText("1 Journey")
+                else
+                    return "<font size=2.5px><b>It's not time yet.</b></font><br><br>"+stellariaText(format(player.points)+" / "+format(player.w.consume)+" Starlight")
+            },
             style(){
                 return {'height':'140px',
                         'width':'280px'}
             },
             canClick(){
-                return player.points.gte(player.w.consume)
+                return player.w.distance.gte(player.w.consume)
             },
             onClick(){
                 addPoints(this.layer, 1)
-                player.points = decimalZero
-                player.w.consume = player.w.consume.mul(new Decimal(10).pow(player.w.total.sub(decimalOne).add(1)))
+                player.w.consume = player.w.consume.mul(new Decimal(10).pow(player.w.total.sub(decimalOne)))
             },
 
-        }
-    },
-    
+        },
+        21:{
+            display(){
+                if(this.canClick())
+                    return "<font size=2.5px><b>Tune the starlight to create Stellaria.</b></font>"
+                else
+                    return "<font size=2.5px><b>It's just a starlight yet.</b></font>"
+            },
+            style(){
+                if(this.canClick())
+                    return {'height':'70px',
+                            'width':'200px',
+                            'background-color':'#276BE0'}
+                else
+                    return {'height':'70px',
+                            'width':'200px',}
+            },
+            canClick(){
+                return player.points.gte(1)
+            },
+            onClick(){
+                
+            },
+            unlocked(){
+                return true
+            },
+        },
 
+        //#region 여정 업그레이드 트리
+        //#region 방랑의 시작
+        101:{
+            title:"Beginning of wandering",
+            display(){
+                return "끼얏호"
+            },
+            canClick(){
+                return canBuyJourney(1, 101)
+            },
+            onClick(){
+                player.w.points = player.w.points.sub(1)
+                player.w.journeys = player.w.journeys.add(1)
+                setJourneyUpgrade(101)
+            },
+            style(){
+                if(hasJourneyUpgrade(101)){
+                    return {
+                        'background-color':'#77BF5F'
+                    }
+                }
+            },
+        },
+
+        102:{
+            title:"11",
+            display(){
+                
+            },
+            canClick(){
+                return canBuyFootprints(1, 102)
+            },
+            onClick(){
+                player.w.footprints = player.w.footprints.add(1)
+                setJourneyUpgrade(102)
+            },
+            style(){
+                if(hasJourneyUpgrade(102)){
+                    return {
+                        'background-color':'#77BF5F'
+                    }
+                }
+            },
+            unlocked(){
+                return hasJourneyUpgrade(101)
+            },
+            branches:[101],
+        },
+        103:{
+            title:"21",
+            display(){
+                return format(clickableEffect("w", 103))
+            },
+            canClick(){
+                return canBuyFootprints(1, 103)
+            },
+            onClick(){
+                player.w.footprints = player.w.footprints.add(1)
+                setJourneyUpgrade(103)
+            },
+            effect(){
+                return player.w.footprints.pow(0.5)
+            },
+            style(){
+                if(hasJourneyUpgrade(103)){
+                    return {
+                        'background-color':'#77BF5F'
+                    }
+                }
+            },
+            unlocked(){
+                return hasJourneyUpgrade(102)
+            },
+            branches:[102],
+        },
+        //#endregion
+
+        //#region 별무리가 내리는 곳
+        104:{
+            title:"A Place where stars fall",
+            display(){
+                
+            },
+            canClick(){
+                return canBuyJourney(1, 104)
+            },
+            onClick(){
+                player.w.points = player.w.points.sub(1)
+                player.w.journeys = player.w.journeys.add(1)
+                setJourneyUpgrade(104)
+            },
+            style(){
+                if(hasJourneyUpgrade(104)){
+                    return {
+                        'background-color':'#77BF5F'
+                    }
+                }
+            },
+            unlocked(){
+                return hasJourneyUpgrade(103)
+            },
+            branches:[103],
+        },
+
+        //#region 별무리가 내리는 곳 - 별빛으로 향하리 분기
+        105:{
+            title:"31",
+            display(){
+                
+            },
+            canClick(){
+                return canBuyFootprints(1, 105)
+            },
+            onClick(){
+                player.w.footprints = player.w.footprints.add(1)
+                setJourneyUpgrade(105)
+            },
+            effect(){
+                
+            },
+            style(){
+                if(hasJourneyUpgrade(105)){
+                    return {
+                        'background-color':'#77BF5F'
+                    }
+                }
+            },
+            unlocked(){
+                return hasJourneyUpgrade(104)
+            },
+            branches:[104],
+        },
+        106:{
+            title:"별빛으로 향하리",
+            display(){
+                
+            },
+            canClick(){
+                return canBuyJourney(1, 106)
+            },
+            onClick(){
+                player.w.points = player.w.points.sub(1)
+                player.w.journeys = player.w.journeys.add(1)
+                setJourneyUpgrade(106)
+            },
+            effect(){
+                
+            },
+            style(){
+                if(hasJourneyUpgrade(106)){
+                    return {
+                        'background-color':'#77BF5F'
+                    }
+                }
+            },
+            unlocked(){
+                return hasJourneyUpgrade(105)
+            },
+            branches:[105],
+        },
+        107:{
+            title:"41",
+            display(){
+                
+            },
+            canClick(){
+                return canBuyJourney(1, 107)
+            },
+            onClick(){
+                player.w.footprints = player.w.footprints.add(1)
+                setJourneyUpgrade(107)
+            },
+            effect(){
+                
+            },
+            style(){
+                if(hasJourneyUpgrade(107)){
+                    return {
+                        'background-color':'#77BF5F'
+                    }
+                }
+            },
+            unlocked(){
+                return hasJourneyUpgrade(106)
+            },
+            branches:[106],
+        },
+        //#endregion
+
+
+        
+        //#endregion
+
+        //#endregion
+    },
+
+    upgrades:{
+        
+    },
+/*
     upgrades:{
         11:{
             title:"beginning of wandering",
@@ -50,12 +318,12 @@ addLayer("w", {
             cost:new Decimal(1),
 
             style(){
-                return {'height':'150px',
-                        'width':'150px'}
+                return {'height':'135px',
+                        'width':'135px'}
             },
 
             effectDisplay(){
-                return stellariaText(format(getPointGen())+"Stellaria")+" /s"
+                return stellariaText(format(getPointGen())+"Starlight")+" /s"
             },
         },
         
@@ -65,8 +333,8 @@ addLayer("w", {
             cost:new Decimal(1),
 
             style(){
-                return {'height':'150px',
-                        'width':'150px'}
+                return {'height':'135px',
+                        'width':'135px'}
             },
         },
 
@@ -76,26 +344,40 @@ addLayer("w", {
             cost:new Decimal(0.001),
 
             style(){
-                return {'height':'150px',
-                        'width':'150px'}
+                return {'height':'135px',
+                        'width':'135px'}
             },
 
             currencyLocation(){ return player },
-            currencyDisplayName: "Stellaria",
+            currencyDisplayName: "Starlight",
             currencyInternalName: "points",
         }
-    },
+    },*/
 
 
     microtabs:{
         wander:{
             "Your Journey":{
                 content:[
-                    ["row",[["upgrade", 11], ["upgrade", 12]]]
+                    ["raw-html",
+                    function(){
+                        let a = format(player.w.footprints, 0)+" footprints life you leave behind"
+                        return a
+                    }],
+                    ["clickable-tree", [
+                        [101],
+                            [102],[103],
+                        [104],
+                            [105],
+                            [106],
+                            [107],
+                    ]]
+                    
                 ],
             },
             "Starlight":{
                 content:[
+                    ["clickable", 21],
                     ["upgrade", 21],
                 ],
                 buttonStyle:{"border-color":"#276BE0"},
@@ -104,8 +386,15 @@ addLayer("w", {
     },
 
     tabFormat:[
-        "main-display",
-        "clickables",
+        ["raw-html",
+        function() {
+            let a = "You travled "+format(player.w.distance)+" Distance<br>"
+            let b = "We're taking "+format(player.w.dispersec)+" distance forward.<br>"
+            let c = "You've been through "+format(player.w.total, 0)+" Journey<br>"
+            let d = "You have "+format(player.w.points, 0)+" Journey<br>"
+            return a+b+c+d
+        }],
+        ["clickable", 11],
         ["display-text",
             function() {
                 return "You are next Journey at "

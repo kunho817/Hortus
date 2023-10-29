@@ -2,7 +2,7 @@ let modInfo = {
 	name: "Hortus",
 	id: "hortus",
 	author: "Aizure",
-	pointsName: "Stellaria",
+	pointsName: "Starlight",
 	modFiles: ["layer.js", "tree.js"],
 
 	discordName: "Aizure",
@@ -35,7 +35,7 @@ function getStartPoints(){
 // Determines if it should show points/sec
 function canGenPoints(){
 	let can = false
-	if(hasUpgrade('w', 11)) can = true
+	if(hasJourneyUpgrade(104)) can = true
 	return can
 }
 
@@ -44,7 +44,9 @@ function getPointGen() {
 	if(!canGenPoints())
 		return new Decimal(0)
 
-	let gain = new Decimal(0.0001)
+	let gain = new Decimal(1)
+	if(hasJourneyUpgrade(105)) gain = gain.mul(2)
+	if(hasJourneyUpgrade(107)) gain = gain.mul(clickableEffect("w", 103).pow(0.4))
 	return gain
 }
 
