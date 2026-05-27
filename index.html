@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hortus</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="kicker">Seed Layer</p>
+          <h1>Hortus</h1>
+        </div>
+        <button class="quiet-button" id="reset-save" type="button">Reset</button>
+      </header>
+
+      <section class="resource-strip" aria-label="Resources">
+        <div>
+          <span>Seeds</span>
+          <strong id="seeds">0</strong>
+        </div>
+        <div>
+          <span>Sprouts</span>
+          <strong id="sprouts">0</strong>
+        </div>
+        <div>
+          <span>Spores</span>
+          <strong id="spores">0</strong>
+        </div>
+        <div>
+          <span>Per second</span>
+          <strong id="per-second">0</strong>
+        </div>
+      </section>
+
+      <section class="game-grid">
+        <section class="basin" aria-labelledby="basin-title">
+          <div class="basin-visual" aria-hidden="true">
+            <svg viewBox="0 0 220 220" role="img">
+              <path class="soil" d="M34 146c22 33 129 33 152 0 8-12 1-28-15-35-29-13-92-13-121 0-16 7-24 23-16 35z"/>
+              <path class="stem" d="M110 139c-5-32 4-62 24-88"/>
+              <path class="leaf left" d="M107 91C70 63 44 74 33 105c32 13 60 6 74-14z"/>
+              <path class="leaf right" d="M119 77c27-33 58-29 78-5-21 25-51 35-78 5z"/>
+              <circle class="seed-dot" cx="86" cy="151" r="7"/>
+              <circle class="seed-dot" cx="112" cy="157" r="6"/>
+              <circle class="seed-dot" cx="137" cy="150" r="8"/>
+            </svg>
+          </div>
+          <div class="basin-copy">
+            <p class="kicker">Current plot</p>
+            <h2 id="basin-title">Seed Basin</h2>
+            <p class="readout"><span id="click-gain">1</span> seeds per harvest</p>
+          </div>
+          <div class="button-row">
+            <button id="harvest" class="primary-action" type="button">Harvest</button>
+            <button id="buy-sprout" type="button">
+              Buy Sprout
+              <span id="sprout-cost">10</span>
+            </button>
+          </div>
+        </section>
+
+        <aside class="side-panel" aria-label="Progression">
+          <section class="panel-section">
+            <div class="section-heading">
+              <p class="kicker">Upgrade</p>
+              <h2>Cultivation</h2>
+            </div>
+            <button id="buy-cultivator" class="wide-action" type="button">
+              <span>Cultivator</span>
+              <small>Cost <b id="cultivator-cost">100</b></small>
+            </button>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-heading">
+              <p class="kicker">Prestige</p>
+              <h2>Spores</h2>
+            </div>
+            <div class="meter" aria-hidden="true">
+              <span id="prestige-progress"></span>
+            </div>
+            <p class="readout">Gain <span id="prestige-gain">0</span> spores</p>
+            <button id="prestige" class="wide-action accent-action" type="button">Release Spores</button>
+          </section>
+        </aside>
+      </section>
+
+      <footer class="status-line" id="status" aria-live="polite">Save ready.</footer>
+    </main>
+
+    <script src="break_eternity.js"></script>
+    <script src="game-core.js"></script>
+    <script src="game.js"></script>
+  </body>
+</html>
